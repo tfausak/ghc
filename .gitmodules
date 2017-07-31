@@ -129,3 +129,12 @@
 [submodule ".arc-linters/arcanist-external-json-linter"]
 	path = .arc-linters/arcanist-external-json-linter
 	url = ../arcanist-external-json-linter.git
+[submodule "libraries/data-bitcode"]
+	path = libraries/data-bitcode
+	url = https://github.com/angerman/data-bitcode.git
+[submodule "libraries/data-bitcode-llvm"]
+	path = libraries/data-bitcode-llvm
+	url = https://github.com/angerman/data-bitcode-llvm.git
+[submodule "libraries/data-bitcode-edsl"]
+	path = libraries/data-bitcode-edsl
+	url = https://github.com/angerman/data-bitcode-edsl.git
