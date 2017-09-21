@@ -159,3 +159,4 @@ test('T9577', [ unless(arch('x86_64') or arch('i386'),skip),
 
 test('T13425', normal, compile_and_run, ['-O'])
 test('castFloatWord', normal, compile_and_run, ['-dcmm-lint'])
+test('T14251', normal, compile_and_run, ['-O2'])
