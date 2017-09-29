@@ -1056,6 +1056,17 @@ ifneq "$(CLEANING)" "YES"
 # This rule seems to hold some files open on Windows which prevents
 # cleaning, perhaps due to the $(wildcard).
 
+# when building stage1only (a cross-compiler), we need to put the
+# stage0 compiled ghc-cabal into the binary distribution.  As the
+# stage1 compiled ghc-cabal is built for the target, however
+# ghc-cabal is used during 'make install' on the host, when
+# installing the binary distribution.
+ifeq "$(Stage1Only)" "YES"
+DIST_GHC_CABAL=utils/ghc-cabal/dist/build/tmp/ghc-cabal
+else
+DIST_GHC_CABAL=utils/ghc-cabal/dist-install/build/tmp/ghc-cabal
+endif
+
 $(eval $(call bindist-list,.,\
     LICENSE \
     README \
@@ -1067,7 +1078,7 @@ $(eval $(call bindist-list,.,\
     Makefile \
     mk/config.mk.in \
     $(INPLACE_BIN)/mkdirhier \
-    utils/ghc-cabal/dist-install/build/tmp/ghc-cabal \
+    $(DIST_GHC_CABAL) \
     $(BINDIST_WRAPPERS) \
     $(BINDIST_PERL_SOURCES) \
     $(BINDIST_LIBS) \
@@ -1127,7 +1138,7 @@ unix-binary-dist-prep:
 	echo "BUILD_SPHINX_HTML  = $(BUILD_SPHINX_HTML)"  >> $(BIN_DIST_MK)
 	echo "BUILD_SPHINX_PDF   = $(BUILD_SPHINX_PDF)"   >> $(BIN_DIST_MK)
 	echo "BUILD_MAN          = $(BUILD_MAN)"          >> $(BIN_DIST_MK)
-	echo "override ghc-cabal_INPLACE = utils/ghc-cabal/dist-install/build/tmp/ghc-cabal-bindist" >> $(BIN_DIST_MK)
+	echo "override ghc-cabal_INPLACE = $(DIST_GHC_CABAL)" >> $(BIN_DIST_MK)
 	echo "UseSystemLibFFI    = $(UseSystemLibFFI)"    >> $(BIN_DIST_MK)
 # See Note [Persist CrossCompiling in binary distributions]
 	echo "CrossCompiling     = $(CrossCompiling)"     >> $(BIN_DIST_MK)
