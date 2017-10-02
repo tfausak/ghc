@@ -35,10 +35,9 @@ FPTOOLS_SET_PLATFORM_VARS
 # Requires FPTOOLS_SET_PLATFORM_VARS to be run first.
 FP_FIND_ROOT
 
-# ToDo: if Stage1Only=YES, should be YES
-CrossCompiling=NO
-CrossCompilePrefix=""
-TargetPlatformFull="${target}"
+CrossCompiling=@CrossCompiling@
+CrossCompilePrefix=@CrossCompilePrefix@
+TargetPlatformFull=@TargetPlatformFull@
 
 AC_SUBST(CrossCompiling)
 AC_SUBST(CrossCompilePrefix)
@@ -198,8 +197,17 @@ fi
 
 FP_SETTINGS
 
-#
-AC_CONFIG_FILES(settings mk/config.mk mk/install.mk)
+dnl ** Hack tools for cross compilers
+dnl --------------------------------------------------------------
+dnl When building a binary distribution for cross compilers,
+dnl we likely want to retain the target-prefixed tools, and not
+dnl have configure overwrite them with what ever it finds, as
+dnl the found tools likely do not target the target.
+AC_CONFIG_FILES(mk/config.mk mk/install.mk)
+if test "x$CrossCompiling" = "xNO"; then
+AC_CONFIG_FILES(settings)
+fi
+
 AC_OUTPUT
 
 # We get caught by

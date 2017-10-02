@@ -1060,11 +1060,17 @@ ifneq "$(CLEANING)" "YES"
 # stage0 compiled ghc-cabal into the binary distribution.  As the
 # stage1 compiled ghc-cabal is built for the target, however
 # ghc-cabal is used during 'make install' on the host, when
-# installing the binary distribution.
-ifeq "$(Stage1Only)" "YES"
+# installing the binary distribution. We will also copy the original
+# `settings` file instead of having `configure` compute a new one.
+# We do this because the bindist configure by default picks up
+# the non-target prefixed toolchain; and cross compilers can be
+# very sensitive to the toolchain.
+ifeq "$(Stage1Only) $(CrossCompiling)" "YES YES"
 DIST_GHC_CABAL=utils/ghc-cabal/dist/build/tmp/ghc-cabal
+DIST_SETTINGS=settings
 else
 DIST_GHC_CABAL=utils/ghc-cabal/dist-install/build/tmp/ghc-cabal
+DIST_SETTINGS=settings.in
 endif
 
 $(eval $(call bindist-list,.,\
@@ -1072,7 +1078,7 @@ $(eval $(call bindist-list,.,\
     README \
     INSTALL \
     configure config.sub config.guess install-sh \
-    settings.in \
+    $(DIST_SETTINGS) \
     llvm-targets \
     packages \
     Makefile \
@@ -1133,7 +1139,7 @@ BIN_DIST_MK = $(BIN_DIST_PREP_DIR)/bindist.mk
 unix-binary-dist-prep:
 	$(call removeTrees,bindistprep/)
 	"$(MKDIRHIER)" $(BIN_DIST_PREP_DIR)
-	set -e; for i in packages LICENSE compiler ghc iserv rts libraries utils docs libffi includes driver mk rules Makefile aclocal.m4 config.sub config.guess install-sh settings.in llvm-targets ghc.mk inplace distrib/configure.ac distrib/README distrib/INSTALL; do ln -s ../../$$i $(BIN_DIST_PREP_DIR)/; done
+	set -e; for i in packages LICENSE compiler ghc iserv rts libraries utils docs libffi includes driver mk rules Makefile aclocal.m4 config.sub config.guess install-sh $(DIST_SETTINGS) llvm-targets ghc.mk inplace distrib/configure.ac distrib/README distrib/INSTALL; do ln -s ../../$$i $(BIN_DIST_PREP_DIR)/; done
 	echo "HADDOCK_DOCS       = $(HADDOCK_DOCS)"       >> $(BIN_DIST_MK)
 	echo "BUILD_SPHINX_HTML  = $(BUILD_SPHINX_HTML)"  >> $(BIN_DIST_MK)
 	echo "BUILD_SPHINX_PDF   = $(BUILD_SPHINX_PDF)"   >> $(BIN_DIST_MK)
