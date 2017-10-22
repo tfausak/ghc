@@ -113,7 +113,7 @@ ghcheaderdir  = $(ghclibdir)/include
 #
 INSTALL_OWNER =
 
-# 
+#
 # Set this to have files installed with a specific group
 #
 INSTALL_GROUP =

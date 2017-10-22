@@ -170,6 +170,8 @@ AC_DEFUN([FPTOOLS_SET_PLATFORM_VARS],
     AC_SUBST(exeext_target)
     AC_SUBST(soext_host)
     AC_SUBST(soext_target)
+
+    AC_SUBST(windows)
 ])
 
 
