@@ -1,6 +1,16 @@
 dnl
 dnl Binary distribution configure script
 dnl
+dnl This script will compute the neccessary substitutions (@...@) for
+dnl - mk/config.mk.in
+dnl - mk/install.mk.in
+dnl and if NOT cross compiling
+dnl - settings.in
+dnl
+dnl The general process is to compute a value, and then make it
+dnl available via AC_SUBST, and subsequently calling AC_CONFIG_FILES
+dnl to turn a x.in file into x.
+dnl
 #!/bin/sh
 #
 
