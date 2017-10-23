@@ -222,6 +222,10 @@ AC_CANONICAL_TARGET
 
 FPTOOLS_SET_PLATFORM_VARS
 
+AC_SUBST([build_alias])
+AC_SUBST([host_alias])
+AC_SUBST([target_alias])
+
 # Verify that the installed (bootstrap) GHC is capable of generating
 # code for the requested build platform.
 if test "$BuildPlatform" != "$bootstrap_target"
