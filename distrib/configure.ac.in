@@ -33,6 +33,24 @@ FFILibDir=@FFILibDir@
 AC_SUBST(FFILibDir)
 AC_SUBST(FFIIncludeDir)
 
+CrossCompiling=@CrossCompiling@
+CrossCompilePrefix=@CrossCompilePrefix@
+TargetPlatformFull=@TargetPlatformFull@
+
+# when cross compiling, retain the build/host/target values
+# from the initial configure step; while still allowing to set
+# them via `--build/--host/--target` if need be.
+if test "x$CrossCompiling" = "xNO"; then
+   if text -z "$build_alias"; then
+      build_alias=@build_alias@
+   fi
+   if test -z "$host_alias"; then
+      host_alias=@host_alias@
+   fi
+   if text -z "$target_alias"; then
+      target_alias=@target_alias@
+   fi
+fi
 
 # We have to run these unconditionally as FPTOOLS_SET_PLATFORM_VARS wants the
 # values it computes.
@@ -40,13 +58,9 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-# FP_FIND_ROOT requires knowledge about $windows; inherit it.
-windows=@windows@
-FP_FIND_ROOT
+FPTOOLS_SET_PLATFORM_VARS
 
-CrossCompiling=@CrossCompiling@
-CrossCompilePrefix=@CrossCompilePrefix@
-TargetPlatformFull=@TargetPlatformFull@
+FP_FIND_ROOT
 
 AC_SUBST(CrossCompiling)
 AC_SUBST(CrossCompilePrefix)
